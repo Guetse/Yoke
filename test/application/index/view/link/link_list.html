@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    {foreach $data as $c}
+    <title>{$c['uname']}</title>
+    {/foreach}
+    <script type="text/javascript" src="/static/lib/jquery/1.9.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="/static/pyq/css/moments.css">
+    <link rel="stylesheet" href="/static/pyq/css/swiper.min.css">
+</head>
+<body>
+<div class="pros_info">
+    <div class="pros_info_title">
+        <em></em><span>商品及尺码预览</span><em></em>
+    </div>
+    <div class="pros_pics">
+        <div class="thumb" id="j-pro-pic" thumblist="list0">
+            {foreach $li as $v}
+            {if isset($v)}
+            <img class="post__imgs__item" src="{$v}" alt="">
+            {/if}
+            {/foreach}
+        </div>
+    </div>
+</div>
+<ul>
+    {foreach $data as $v}
+    <li class="li-item">
+        <!-- 朋友圈头像 -->
+        <div class="avt-wrap">
+            <img class="avt-wrap__img" alt="头像" src="/{$v.img}"/>
+        </div>
+        <!-- 朋友圈内容区域 -->
+        <div class="hd">
+            <!-- 发布人昵称 -->
+            <p class="name">
+                {$v['name']}
+            </p>
+            <!-- 发布内容 -->
+            <div class="post">
+                <p class="post__text">
+                    {$v.title}
+                    <br>
+                    规格:{$v.specifications}
+                    <br>
+                    {$v.detail}
+                    <br>
+                </p>
+                <p class="price">
+                    <span class="price-now"><span style="font-size: 14px">售价：￥</span> {$v.shop_price} </span>
+                    <!--<span class="price-old">￥ {$v.makerprice} </span>-->
+                </p>
+                <!-- 发布的图片,如果有4张图片则添加 post__imgs--4 类名 , 如果已售罄则添加 post__imgs--out 类名 -->
+                {if ($v['sold'])==0}
+                <div class="post__imgs post__imgs--4 post__imgs--out thumb" thumblist="img{$v.id}">
+                    {foreach $v.cover as $vo}
+                    <img class="post__imgs__item" src="{$vo}" alt="">
+                    {/foreach}
+                </div>
+               {else/}
+                {if(count($v.cover)==4)}
+                <div class="post__imgs thumb post__imgs--4"  thumblist="img{$v.id}">
+                    {foreach $v.cover as $k=>$vo}
+                    <img class="post__imgs__item" src="{$vo}" alt="">
+                    {/foreach}
+                </div>
+                {else/}
+                <div class="post__imgs thumb"  thumblist="img{$v.id}">
+                    {foreach $v.cover as $k=>$vo}
+                    <img class="post__imgs__item" src="{$vo}" alt="">
+                    {/foreach}
+                </div>
+                {/if}
+                {/if}
+            </div>
+        </div>
+    </li>
+    {/foreach}
+</ul>
+<div class="loadmore" style="display: block;">———— 我是有底线的 ————</div>
+<!-- Swiper -->
+<div class="swiper-container" id="origin-img">
+    <div class="swiper-wrapper"></div>
+    <div class="swiper-pagination"></div>
+</div>
+
+<?php
+
+
+?>
+
+<script>
+    var imgsdata = {};
+
+    imgsdata['list0'] = {:json_encode($li)};
+    {foreach $data as $v}
+    imgsdata["img{$v.id}"]={:json_encode($v.cover)};
+    {/foreach}
+</script>
+<script src="/static/pyq/js/swiper.min.js"></script>
+<script src="/static/pyq/js/moments.js"></script>
+</body>
+</html>
